@@ -1,0 +1,32 @@
+.bdlite-react-base-table-wrapper{
+  
+  .BaseTable{
+    width: 100%;
+  }
+    /* 父列标题样式 */
+  .base-table-header-group {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+  }
+  /* 子列标题样式 */
+
+  .base-table-header-cell {
+    border-right: 1px solid #eee;
+  }
+
+  .BaseTable__header-cell{
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    // &:not(:last-child) {
+     // }
+
+    &.no-border-bottom{
+      border-bottom: none;
+    }
+  }
+  .base-table-group-header{
+    &:not(:last-child) {
+      border-bottom: none;
+    }
+  }
+}

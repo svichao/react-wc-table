@@ -1,25 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ConfigProvider from 'antd/es/config-provider';
+import zhCN from 'antd/es/locale/zh_CN';
+import ReactBaseTable from '@components/base-table'
+import Pagination from '@components/page'
 
-function App() {
+function App(props: any) {
+  console.log('Appprops: ', props);
+  const {
+    container,
+    pagination = {},
+    ...rest
+  } = props
+  console.log('container: ', container);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ConfigProvider locale={zhCN}>
+      <ReactBaseTable {...rest} />
+      <Pagination pagination={pagination} />
+    </ConfigProvider>
   );
 }
 

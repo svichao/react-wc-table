@@ -1,8 +1,16 @@
 {
-  "name": "react-webcomponent-generator",
+  "name": "@bdlite/table",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "dist/main.js",
+  "style": "dist/main.css",
+  "authors": [
+    "sunweichao <sunweichao@360.cn>",
+    "liujinjian <liujinjian@360.cn>"
+  ],
+  "license": "MIT",
   "dependencies": {
+    "@r2wc/react-to-web-component": "^2.0.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
@@ -11,16 +19,20 @@
     "@types/node": "^16.7.13",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "antd": "^5.24.4",
+    "classnames": "^2.5.1",
     "react": "^19.0.0",
+    "react-base-table": "^1.13.5",
     "react-dom": "^19.0.0",
+    "react-fast-compare": "^3.2.2",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco  start",
+    "build": "craco  build",
+    "test": "craco  test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -40,5 +52,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@bdlite/fe-lint": "^0.3.0",
+    "@craco/craco": "^7.1.0",
+    "babel-plugin-import": "^1.13.8",
+    "sass": "^1.86.0"
   }
 }

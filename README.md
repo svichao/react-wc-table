@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# React Webcomponent 生成器
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![React Version](https://img.shields.io/badge/react-%5E18.2.0-blue)](https://reactjs.org/)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D16.14.0-green)](https://nodejs.org/)
 
-## Available Scripts
+基于 Create React App 构建的 Webcomponent 组件生成解决方案，提供高效的组件开发与构建体验。
 
-In the project directory, you can run:
+## ✨ 功能特性
 
-### `yarn start`
+- 🚀 快速创建 React Web 组件
+- 📦 开箱即用的构建配置
+- ⚡ 支持热重载开发模式
+- 📈 生产环境优化构建
+- 🔧 可扩展的配置选项
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 📦 环境要求
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Node.js >= 16.14
+- Yarn >= 1.22 (推荐) 或 npm >= 8.5
 
-### `yarn test`
+## 🛠️ 安装与使用
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 安装依赖
+```bash
+yarn install
 
-### `yarn build`
+# 或
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 开发模式
+```bash
+yarn start
+```
+### 生产构建
+```bash
+yarn build
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📂 项目结构
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+react-webcomponent-generator/
+├── public/          # 静态资源
+├── src/             # 源代码
+│   ├── components/  # 公共组件
+│   ├── utils/       # 工具函数
+│   └── ...         
+├── .eslintrc       # 代码规范配置
+└── package.json    # 依赖配置
