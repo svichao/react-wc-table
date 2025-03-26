@@ -42,8 +42,7 @@ module.exports = {
         output: {
           ...webpackConfig.output, // 保留原有 output 配置
           path: path.resolve(__dirname, 'dist'), // 自定义输出目录
-          filename: '[name].js', // 带哈希的文件名 [name].[contenthash:8].js
-        // 可添加其他 output 配置项...
+          filename: 'main.js', // 修改为固定文件名 main.js
         },
       })
 

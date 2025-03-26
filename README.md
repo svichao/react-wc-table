@@ -1,81 +1,105 @@
-# React Webcomponent 生成器
+# @bdlite/table
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![React Version](https://img.shields.io/badge/react-%5E18.2.0-blue)](https://reactjs.org/)
-[![Node Version](https://img.shields.io/badge/node-%3E%3D16.14.0-green)](https://nodejs.org/)
+一个基于 React 和 Webcomponent 的高性能表格组件，支持大数据量渲染和灵活的配置。
 
-## 项目简介
+## 安装
 
-React Webcomponent 生成器是一个基于 Create React App 构建的解决方案，用于快速生成 Webcomponent 组件。它封装了 `react-base-table` 组件，支持高性能表格组件的开发，提供了灵活的配置和扩展能力。
-
-## 功能特点
-
-- **高性能表格组件**：基于 `react-base-table`，支持大数据量的高效渲染。
-- **Webcomponent 支持**：通过 `@r2wc/react-to-web-component` 将 React 组件转换为 Webcomponent。
-- **Ant Design 集成**：内置 Ant Design 支持，提供丰富的 UI 组件。
-- **灵活的配置**：支持自定义列、分页、排序等功能。
-- **现代开发工具链**：基于 React 18 和 TypeScript，支持最新的开发特性。
-
-## 环境要求
-
-- Node.js >= 16.14
-- Yarn >= 1.22（推荐）或 npm >= 8.5
-
-## 安装与使用
-
-### 安装依赖
+使用 npm 或 yarn 安装：
 
 ```bash
-yarn install
-
+npm install @bdlite/table
 # 或
-npm install
+yarn add @bdlite/table
 ```
 
-### 开发模式
+## 使用方法
 
-```bash
-yarn start
-```
-
-### 生产构建
-
-```bash
-yarn build
-```
-
-## 项目结构
-
-```
-react-webcomponent-generator/
-├── public/          # 静态资源
-├── src/             # 源代码
-│   ├── components/  # 公共组件
-│   ├── utils/       # 工具函数
-│   └── ...         
-├── .eslintrc       # 代码规范配置
-└── package.json    # 依赖配置
-```
-
-## 使用说明
-
-### 自定义表格组件
-
-该项目封装了 `react-base-table`，支持以下功能：
-
-- **列配置**：通过 `columns` 属性自定义列的样式、宽度、对齐方式等。
-- **分页**：支持 Ant Design 风格的分页，通过 `pagination` 属性配置。
-- **事件处理**：支持行点击、列排序等事件的回调处理。
-
-### Webcomponent 集成
-
-通过 `@r2wc/react-to-web-component`，可以将 React 组件转换为 Webcomponent，方便在非 React 项目中使用。
-
-示例：
+在项目中引入并使用：
 
 ```html
 <react-base-table></react-base-table>
 ```
+
+### React 项目中使用
+
+```tsx
+import React from 'react';
+import ReactBaseTable from '@bdlite/table';
+
+function App() {
+  const columns = [
+    { title: 'Name', dataKey: 'name', width: 150 },
+    { title: 'Age', dataKey: 'age', width: 100 },
+  ];
+  const data = [
+    { name: 'John', age: 28 },
+    { name: 'Jane', age: 32 },
+  ];
+
+  return <ReactBaseTable columns={columns} data={data} />;
+}
+
+export default App;
+```
+
+### Vue 项目中使用
+
+在 Vue 项目中，可以通过 Webcomponent 使用，并直接传递对象作为 `columns` 和 `data`：
+
+```vue
+<template>
+  <react-base-table :columns="columns" :data="data"></react-base-table>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      columns: [
+        { title: 'Name', dataKey: 'name', width: 150 },
+        { title: 'Age', dataKey: 'age', width: 100 },
+      ],
+      data: [
+        { name: 'John', age: 28 },
+        { name: 'Jane', age: 32 },
+      ],
+    };
+  },
+};
+</script>
+```
+
+### 非 React 项目中使用
+
+通过 Webcomponent 使用，支持直接传递 JSON 字符串或对象：
+
+```html
+<!-- 使用 JSON 字符串 -->
+<react-base-table
+  columns='[{"title":"Name","dataKey":"name","width":150},{"title":"Age","dataKey":"age","width":100}]'
+  data='[{"name":"John","age":28},{"name":"Jane","age":32}]'>
+</react-base-table>
+
+<!-- 使用对象 -->
+<script>
+  const columns = [
+    { title: 'Name', dataKey: 'name', width: 150 },
+    { title: 'Age', dataKey: 'age', width: 100 },
+  ];
+  const data = [
+    { name: 'John', age: 28 },
+    { name: 'Jane', age: 32 },
+  ];
+  document.querySelector('react-base-table').columns = columns;
+  document.querySelector('react-base-table').data = data;
+</script>
+```
+
+## 功能特点
+
+- **高性能渲染**：支持大数据量表格的高效渲染。
+- **灵活配置**：支持自定义列、分页、排序等功能。
+- **Webcomponent 支持**：可在非 React 项目中直接使用。
 
 ## 开源协议
 

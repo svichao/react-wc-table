@@ -1,12 +1,16 @@
 {
   "name": "@bdlite/table",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "main": "dist/main.js",
   "style": "dist/main.css",
   "authors": [
     "sunweichao <sunweichao@360.cn>",
     "liujinjian <liujinjian@360.cn>"
+  ],
+  "files": [
+    "dist/main.js",
+    "dist/main.css"
   ],
   "license": "MIT",
   "dependencies": {
