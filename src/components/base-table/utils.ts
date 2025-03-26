@@ -351,7 +351,6 @@ export function useDeepEqualEffect<TDeps = React.DependencyList>(
   if (!oldDeps.current || !compare(deps, oldDeps.current as TDeps)) {
     oldDeps.current = deps;
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(effect, [ oldDeps.current ]);
 }
 

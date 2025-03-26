@@ -1,5 +1,4 @@
 module.exports = {
-  extends: [ './node_modules/@bdlite/fe-lint/lib/eslint.js' ],
   rules: {
     'func-names': 'off', // 不能使用匿名函数
     'no-param-reassign': 'off',

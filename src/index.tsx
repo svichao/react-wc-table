@@ -101,4 +101,4 @@ const Main = r2wc(App, { props })
 
 customElements.define('react-base-table', Main)
 
-export default App;
+export default Main;
