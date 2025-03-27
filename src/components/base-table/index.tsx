@@ -55,6 +55,7 @@ function BaseTable(props) {
         columns={cols}
         data={data}
         width={w}
+        fixed
         height={height}
         maxHeight={maxHeight}
         rowHeight={rowHeight}
