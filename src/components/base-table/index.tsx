@@ -46,7 +46,6 @@ function BaseTable(props) {
   pipeline.use(sort({ sorts, keepDataSource: true }))
   const pipelineProps = pipeline.getProps()
   const { headerHeight, headerRenderer = DefaultHeaderRenderer } = pipelineProps
-  console.log('headerRenderer: ', headerRenderer);
 
   return (
     <div className="bdlite-react-base-table-wrapper">

@@ -7,7 +7,7 @@ function App(props: any) {
   console.log('Appprops: ', props);
   const {
     container,
-    pagination = {},
+    pagination,
     ...rest
   } = props
   console.log('container: ', container);
@@ -15,7 +15,7 @@ function App(props: any) {
   return (
     <ConfigProvider locale={zhCN}>
       <ReactBaseTable {...rest} />
-      <Pagination pagination={pagination} />
+      {pagination && <Pagination pagination={pagination} />}
     </ConfigProvider>
   );
 }
