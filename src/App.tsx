@@ -1,7 +1,7 @@
 import ConfigProvider from 'antd/es/config-provider';
 import zhCN from 'antd/es/locale/zh_CN';
 import ReactBaseTable from '@components/base-table'
-import Pagination from '@components/page'
+import Pagination from '@components/pagination'
 
 function App(props: any) {
   console.log('Appprops: ', props);

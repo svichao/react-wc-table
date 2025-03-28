@@ -9,6 +9,7 @@ import {
   safeHeaderRender,
 } from '../utils';
 import { getHeaderStyleFromColumn } from './config';
+import Ellipsis from './ellipsis'
 
 interface SortIconProps {
   style?: CSSProperties;
@@ -110,40 +111,47 @@ function DefaultSortHeaderCell({
       ? 'center'
       : 'flex-start';
 
-  return (
-    <div
-      onClick={onToggle}
-      style={{
-        justifyContent,
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        userSelect: 'none',
-        width: '100%',
-        ...getHeaderStyleFromColumn(column)
-      }}
-    >
+  const renderChildren = (column) => {
+    const style = column.ellipsis?getHeaderStyleFromColumn(column): {width: 'calc(100% - 16px)'}
+    return <Ellipsis ellipsis={column.ellipsis?{tooltip: children}:false} style={style}>
       {children}
-      <SortIcon
-        style={{ userSelect: 'none', marginLeft: 2, flexShrink: 0 }}
-        size={16}
-        order={sortOrder}
-      />
-      {sortOptions.mode === 'multiple' && sortIndex != -1 && (
-        <div
-          style={{
-            userSelect: 'none',
-            marginLeft: 2,
-            color: '#666',
-            flex: '0 0 auto',
-            fontSize: 10,
-            fontFamily: 'monospace',
-          }}
-        >
-          {sortIndex + 1}
-        </div>
-      )}
-    </div>
+    </Ellipsis>
+  }
+  
+  return (
+      <div
+        onClick={onToggle}
+        style={{
+          justifyContent,
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          userSelect: 'none',
+          width: '100%',
+          ...getHeaderStyleFromColumn(column)
+        }}
+      >
+        {renderChildren(column)}
+        <SortIcon
+          style={{ userSelect: 'none', marginLeft: 2, flexShrink: 0 }}
+          size={16}
+          order={sortOrder}
+        />
+        {/* {sortOptions.mode === 'multiple' && sortIndex != -1 && (
+          <div
+            style={{
+              userSelect: 'none',
+              marginLeft: 2,
+              color: '#666',
+              flex: '0 0 auto',
+              fontSize: 10,
+              fontFamily: 'monospace',
+            }}
+          >
+            {sortIndex + 1}
+          </div>
+        )} */}
+      </div>
   );
 }
 

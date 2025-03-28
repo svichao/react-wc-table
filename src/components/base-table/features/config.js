@@ -1,3 +1,30 @@
+import Ellipsis from './ellipsis';
+
+export const processColumn = (column) => {
+  if (column?.children?.length) {
+    column.children = column.children.map(processColumn);
+  }
+
+  const originalCellRenderer = column.cellRenderer;
+  const originalHeaderRenderer = column.headerRenderer;
+
+  column.cellRenderer = ({ cellData, column, ...rest }) => {
+    const content = originalCellRenderer ? originalCellRenderer({ cellData, column, ...rest }) : cellData
+    return <Ellipsis ellipsis={column.ellipsis?{tooltip:cellData}: false}>{content}</Ellipsis>
+  }
+
+  column.headerRenderer = ({ column, ...rest }) => {
+    const content = originalHeaderRenderer ? originalHeaderRenderer({ column, ...rest }) : column.title
+    return <Ellipsis ellipsis={column.ellipsis?{tooltip: column.title}:false} style={{...getHeaderStyleFromColumn(column)}}>{content}</Ellipsis>
+  }
+  return column
+};
+
+export function handleColumnRenderer(columns) {
+  return columns.map(processColumn);
+}
+
+
 export const getHeaderStyleFromColumn = (column) => {
   const { header } = column;
   if (!header) return {};

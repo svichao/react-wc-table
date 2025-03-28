@@ -7,7 +7,8 @@ import {
   RecursiveFlatMapInfo,
 } from '../utils';
 import { getHeaderStyleFromColumn } from './config';
-import defaultHeaderRenderer from './default-header-renderer';
+// import defaultHeaderRenderer from './default-header-renderer';
+import Ellipsis from './ellipsis';
 
 type ITreeItem = ArtColumn;
 
@@ -246,7 +247,7 @@ export function groupHeader(opts: {
             groupCells.push(
               <div
                 key={column.key}
-                className="BaseTable__header-cell no-border-bottom"
+                className="BaseTable__header-cell"
                 style={{
                   ...cells[columnIndex].props.style,
                   width,
@@ -257,8 +258,8 @@ export function groupHeader(opts: {
                     : 0,
                   display: 'flex',
                   justifyContent: 'center',
+                  borderBottom: 'none',
                   ...paddingStyle,
-                  ...getHeaderStyleFromColumn(column)
                 }}
               />
             );
@@ -303,7 +304,7 @@ export function groupHeader(opts: {
                     ...getHeaderStyleFromColumn(column)
                   }}
                 >
-                  {item.title}
+                  <Ellipsis ellipsis={item.ellipsis?{tooltip: item.title}:false} style={{...getHeaderStyleFromColumn(column)}}>{item.title}</Ellipsis>
                 </div>,
               );
               renderEndMap[item?.key?.toString() + headerIndex] = true;
@@ -357,9 +358,6 @@ export function groupHeader(opts: {
         Array.from(Array(maxLevel), () => headHeight),
       );
       pipeline.columns(collectNodes(columns, 'leaf-only'));
-    } else {
-      const headerRenderer = defaultHeaderRenderer;
-      pipeline.appendTableProps('headerRenderer', headerRenderer);
     }
     return pipeline;
   };

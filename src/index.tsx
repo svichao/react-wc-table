@@ -33,6 +33,7 @@ const columnTypes = {
   headerRenderer: 'function',
   children: 'array',
   header: headeTypes,
+  ellipsis: 'boolean',
 }
 
 // props同antd pagination

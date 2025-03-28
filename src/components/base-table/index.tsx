@@ -4,6 +4,7 @@ import { groupHeader, sort } from './features'
 import { useTablePipeline } from './pipeline';
 import DefaultHeaderRenderer from './features/default-header-renderer';
 import classnames from 'classnames'
+import { handleColumnRenderer } from './features/config';
 import 'react-base-table/styles.css'
 import './style.scss'
 
@@ -36,10 +37,13 @@ function BaseTable(props) {
     return { sorts, sortState: _sortState }
   }
 
+  const columns = handleColumnRenderer(cols)
+  console.log('columns: ', columns);
+
   const pipeline = useTablePipeline({
     primaryKey: 'id',
   })
-    .input({ data, columns: cols })
+    .input({ data, columns })
     .use(groupHeader({ headHeight: hh, cellPadding: 0 }));
 
   const { sorts, sortState } = getSorts(pipeline.getColumns())

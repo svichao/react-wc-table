@@ -13,16 +13,15 @@
   .base-table-header-cell {
     border-right: 1px solid #eee;
   }
-
+  
+  .BaseTable__header-cell-text {
+    white-space: nowrap;
+  }
   .BaseTable__header-cell{
     border-right: 1px solid #eee;
     border-bottom: 1px solid #eee;
     // &:not(:last-child) {
      // }
-
-    &.no-border-bottom{
-      border-bottom: none;
-    }
   }
   .base-table-group-header{
     &:not(:last-child) {

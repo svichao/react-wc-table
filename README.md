@@ -101,6 +101,10 @@ export default {
 - **灵活配置**：支持自定义列、分页、排序等功能。
 - **Webcomponent 支持**：可在非 React 项目中直接使用。
 
+## GitHub
+
+项目源码托管在 GitHub：[https://github.com/svichao/react-webcomponent-generator](https://github.com/svichao/react-webcomponent-generator)
+
 ## 开源协议
 
 本项目基于 [MIT License](LICENSE) 开源，欢迎自由使用和贡献。
