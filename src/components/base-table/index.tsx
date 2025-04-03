@@ -8,6 +8,10 @@ import { handleColumnRenderer } from './features/config';
 import 'react-base-table/styles.css'
 import './style.scss'
 
+const DEFAULT_BORDER_COLOR = '#D8E0E8'
+const DEFAULT_ODD_ROW_BG_COLOR = '#FFF'
+const DEFAULT_EVEN_ROW_BG_COLOR = '#F2F7FF'
+const DEFAULT_FONT_COLOR = '#1B2532'
 function BaseTable(props) {
   const {
     rowKey,
@@ -19,6 +23,16 @@ function BaseTable(props) {
     rowHeight = 32,
     headerHeight: hh = 32,
     headerClassName,
+    className,
+    border = { horizon: true, vertical: true, color: DEFAULT_BORDER_COLOR },
+    bodyStyle = {
+      fontSize: 12,
+      fontWeight: 'normal',
+      color: DEFAULT_FONT_COLOR,
+      oddRowBgColor: DEFAULT_ODD_ROW_BG_COLOR,
+      evenRowBgColor: DEFAULT_EVEN_ROW_BG_COLOR 
+    },
+    style = {},
     ...rest
   } = props
 
@@ -38,7 +52,6 @@ function BaseTable(props) {
   }
 
   const columns = handleColumnRenderer(cols)
-  console.log('columns: ', columns);
 
   const pipeline = useTablePipeline({
     primaryKey: 'id',
@@ -52,8 +65,16 @@ function BaseTable(props) {
   const { headerHeight, headerRenderer = DefaultHeaderRenderer } = pipelineProps
 
   return (
-    <div className="bdlite-react-base-table-wrapper">
+    <div
+      className="bdlite-react-base-table-wrapper"
+      style={{ 
+        '--bdlite-base-table-border-color': border.color,
+        '--bdlite-base-table-odd-row-bg-color': bodyStyle.oddRowBgColor,
+        '--bdlite-base-table-even-row-bg-color': bodyStyle.evenRowBgColor,
+       } as React.CSSProperties}
+    >
       <ReactBaseTable
+        className={classnames(className, border?.horizon && 'has-horizon-border', border?.vertical && 'has-vertical-border')}
         rowKey={rowKey}
         columns={cols}
         data={data}
@@ -66,6 +87,12 @@ function BaseTable(props) {
         headerRenderer={headerRenderer}
         headerClassName={classnames(headerHeight?.length > 1 ? 'base-table-group-header' : '', headerClassName)}
         sortState={sortState}
+        style={{
+          ...style,
+          fontSize: bodyStyle.fontSize,
+          fontWeight: bodyStyle.fontWeight,
+          color: bodyStyle.color 
+        }}
         {...pipelineProps}
         {...rest}
       />

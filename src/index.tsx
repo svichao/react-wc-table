@@ -43,6 +43,20 @@ const paginationProps = {
   total: 'number',
 }
 
+const borderProps =  { 
+  horizon: 'boolean',
+  vertical: 'boolean',
+  color: 'string'
+}
+
+const bodyStyleProps =  { 
+  fontSize: 'number',
+  fontWeight: 'string | number',
+  color: 'string',
+  oddRowBgColor: 'string',
+  evenRowBgColor: 'string',
+}
+
 const props: any = {
   rowKey: 'string | number',
   columns: columnTypes,
@@ -95,6 +109,8 @@ const props: any = {
   components: 'json',
   chartData: 'json',
   pagination: paginationProps,
+  border: borderProps, // 边框
+  bodyStyle: bodyStyleProps,
 }
 
 // r2wc类型转换：string | number | boolean | function | json
@@ -102,4 +118,5 @@ const Main = r2wc(App, { props })
 
 customElements.define('react-base-table', Main)
 
-export default Main;
+
+export default App;
