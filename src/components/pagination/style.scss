@@ -3,5 +3,10 @@
   .ant-pagination {
     padding-top    : 8px;
     justify-content: flex-end;
+    font-size: 12px;
+
+    .ant-select-single.ant-select-sm .ant-select-selector{
+      font-size: 12px;
+    }
   }
 }

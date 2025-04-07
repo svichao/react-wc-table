@@ -5,8 +5,8 @@
   "main": "dist/main.js",
   "style": "dist/main.css",
   "authors": [
-    "sunweichao <sunweichao@360.cn>",
-    "liujinjian <liujinjian@360.cn>"
+    "sunweichao",
+    "liujinjian"
   ],
   "keywords": [
     "bdlite/table",
