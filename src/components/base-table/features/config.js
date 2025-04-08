@@ -39,10 +39,15 @@ export const processColumn = (column) => {
   column.cellRenderer = ({ cellData, column, rowData, ...rest }) => {
     let content = originalCellRenderer ? originalCellRenderer({ cellData, column, rowData, ...rest }) : cellData
     let style = {}
-    const {handleDrill, compareOn} = column
+    const { isLink, handleClick, compareOn } = column
     // 下钻功能
-    if (handleDrill) {
-      content = <a  href="#!" onClick={(event) => column.handleDrill({ cellData, column, event, ...rest })}>{content}</a>
+    if (isLink) {
+      const onClick= (event) => {
+        if (handleClick) {
+          handleClick({ cellData, column, event, ...rest })
+        }
+      }
+      content = <a  href="#!" onClick={onClick}>{content}</a>
     }
 
     // 同环比功能

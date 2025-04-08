@@ -43,6 +43,9 @@ module.exports = {
           ...webpackConfig.output, // 保留原有 output 配置
           path: path.resolve(__dirname, 'dist'), // 自定义输出目录
           filename: 'main.js', // 修改为固定文件名 main.js
+          library: 'BaseTable',
+          libraryTarget: 'umd',
+          globalObject: 'this',
         },
       })
 
