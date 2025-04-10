@@ -1,10 +1,3 @@
-/*
- * @Author: renjie.yin
- * @Date: 2022-04-14 11:32:30
- * @LastEditors: renjie.yin
- * @LastEditTime: 2022-06-14 14:01:08
- * @Description:
- */
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { TablePipeline } from '../pipeline';

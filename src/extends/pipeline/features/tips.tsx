@@ -1,10 +1,3 @@
-/*
- * @Author: renjie.yin
- * @Date: 2021-03-15 17:21:04
- * @LastEditors: renjie.yin
- * @LastEditTime: 2022-09-27 17:19:49
- * @Description:
- */
 import React from 'react';
 import { TablePipeline } from '../pipeline';
 

@@ -1,5 +1,6 @@
 import Ellipsis from './ellipsis';
 import React from 'react';
+import Progress from 'antd/es/progress';
 
 export const getFieldMapValue = (value) => {
   return value?.d || value?.v || value || '-';
@@ -31,13 +32,23 @@ export const getColor = (cellData, colorMode) => {
   return color;
 };
 
-export const processColumn = (column) => {
+export const processColumn = ({ column, ...rest }) => {
   if (column?.children?.length) {
-    column.children = column.children.map(processColumn);
+    column.children = column.children.map((column) =>
+      processColumn({ column, ...rest }),
+    );
   }
 
   const originalCellRenderer = column.cellRenderer;
   const originalHeaderRenderer = column.headerRenderer;
+  const { customSvgIcons } = rest;
+  let customSvgIconsMap;
+  if (customSvgIcons) {
+    customSvgIconsMap = customSvgIcons?.reduce((acc, icon) => {
+      acc[icon.name] = icon.svg;
+      return acc;
+    }, {});
+  }
 
   column.cellRenderer = ({ cellData, column, rowData, ...rest }) => {
     let content = originalCellRenderer
@@ -73,116 +84,38 @@ export const processColumn = (column) => {
     }
     if (column.iconMapping) {
       const iconMappingret = column.iconMapping(cellData, rowData);
-    }
-    if (column.numberMapping) {
-      const numberMappingret = column.numberMapping(cellData);
-    }
-
-    // 同环比功能
-    if (compareOn) {
-      const { position, compareOpt } = compareOn;
-
-      // right
-      if (position === 'right') {
-        // 非对比指标字段
-        if (!column.isMetricField) {
-          style.color = getColor(cellData, compareOn.style);
-        }
-      }
-
-      // bottom
-      if (position === 'bottom') {
-        // 对比指标字段
-        if (column.isMetricField) {
-          if (compareOpt.length) {
-            let ret = [content];
-            compareOpt.forEach((j) => {
-              ret.push(rowData[`${column.key}##${j}`].v);
-            });
-            content = ret.map((val) => {
-              return (
-                <span
-                  style={{ color: getColor(val, compareOn.style), flex: 1 }}
-                >
-                  {val}{' '}
-                </span>
-              );
-            });
-            style.display = 'flex';
-          }
-        }
-      }
-    }
-    return (
-      <Ellipsis
-        ellipsis={column.ellipsis ? { tooltip: cellData } : false}
-        style={{ ...style }}
-      >
-        {content}
-      </Ellipsis>
-    );
-  };
-
-  column.headerRenderer = ({ column, ...rest }) => {
-    const content = originalHeaderRenderer
-      ? originalHeaderRenderer({ column, ...rest })
-      : column.title;
-    return (
-      <Ellipsis
-        ellipsis={column.ellipsis ? { tooltip: column.title } : false}
-        style={{ ...getHeaderStyleFromColumn(column) }}
-      >
-        {content}
-      </Ellipsis>
-    );
-  };
-  return column;
-};
-export const processCellProps = (column) => {
-  if (column?.children?.length) {
-    column.children = column.children.map(processColumn);
-  }
-
-  const originalCellRenderer = column.cellRenderer;
-  const originalHeaderRenderer = column.headerRenderer;
-
-  column.cellRenderer = ({ cellData, column, rowData, ...rest }) => {
-    let content = originalCellRenderer
-      ? originalCellRenderer({ cellData, column, rowData, ...rest })
-      : cellData;
-    let style = {};
-    const { isLink, handleClick, compareOn } = column;
-    // 下钻功能
-    if (isLink) {
-      const onClick = (event) => {
-        if (handleClick) {
-          handleClick({ cellData, column, event, ...rest });
-        }
-      };
       content = (
-        <a href="#!" onClick={onClick}>
+        <span style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+          <img
+            style={{ width: '14px', marginRight: '2px' }}
+            src={customSvgIconsMap[iconMappingret.icon]}
+          />
           {content}
-        </a>
+        </span>
       );
     }
-    // 条件格式
-    if (column.backMapping) {
-      const backMappingRet = column.backMapping(cellData, rowData);
-      style.backgroundColor = backMappingRet.fill;
-      column.style = {
-        ...(column?.style || {}),
-        backgroundColor: backMappingRet.fill,
-      };
-    }
-    if (column.textMapping) {
-      const textMappingret = column.textMapping(cellData, rowData);
-      style.color = textMappingret.fill;
-    }
-    if (column.iconMapping) {
-      const iconMappingret = column.iconMapping(cellData, rowData);
-    }
     if (column.numberMapping) {
-      const numberMappingret = column.numberMapping(cellData);
+      const numberMappingret = column.numberMapping(getFieldMapValue(cellData));
+      content = (
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Progress
+            style={{ width: '50%' }}
+            size="small"
+            showInfo={false}
+            percent={numberMappingret.percent}
+            strokeColor={numberMappingret.color}
+            trailColor={numberMappingret.lineColor}
+          />
+          {content}
+        </span>
+      );
     }
 
     // 同环比功能
@@ -211,7 +144,7 @@ export const processCellProps = (column) => {
                 <span
                   style={{ color: getColor(val, compareOn.style), flex: 1 }}
                 >
-                  {val}{' '}
+                  {getFieldMapValue(val)}
                 </span>
               );
             });
@@ -237,7 +170,7 @@ export const processCellProps = (column) => {
     return (
       <Ellipsis
         ellipsis={column.ellipsis ? { tooltip: column.title } : false}
-        style={{ ...getHeaderStyleFromColumn(column) }}
+        // style={{ ...getHeaderStyleFromColumn(column) }}
       >
         {content}
       </Ellipsis>
@@ -246,17 +179,20 @@ export const processCellProps = (column) => {
   return column;
 };
 
-export function handleColumnRenderer(columns) {
-  return columns.map(processColumn);
+export function handleColumnRenderer({ columns, ...rest }) {
+  if (!columns?.length) return [];
+  return columns.map((column) => processColumn({ column, ...rest }));
 }
 
 export function extraCellProps({ column, rowData }) {
   const cellProps = {};
   if (column.backMapping) {
     const backMappingRet = column.backMapping(rowData[column.key], rowData);
-    cellProps.style = {
-      backgroundColor: backMappingRet.fill,
-    };
+    if (backMappingRet) {
+      cellProps.style = {
+        backgroundColor: backMappingRet.fill,
+      };
+    }
   }
   return cellProps;
 }

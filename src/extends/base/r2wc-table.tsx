@@ -111,6 +111,7 @@ const props: any = {
   pagination: paginationProps,
   border: borderProps, // 边框
   bodyStyle: bodyStyleProps,
+  extraProps: 'json',
 };
 
 // r2wc类型转换：string | number | boolean | function | json

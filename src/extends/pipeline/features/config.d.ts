@@ -60,8 +60,6 @@ export function getColor(
 
 export function processColumn(column: Column): Column;
 
-export function processCellProps(column: Column): Column;
-
 export function handleColumnRenderer(columns: Column[]): Column[];
 
 export function extraCellProps(params: { column: Column; rowData: any }): {

@@ -1,10 +1,7 @@
-// @ts-nocheck
-// import Table1 from 'react-base-table'
 import React from 'react';
 import Table from '../../base';
-import { groupHeader, sort } from '../pipeline/features';
+import { groupHeader, sort, defaultHeaderRenderer } from '../pipeline/features';
 import { useTablePipeline } from '../pipeline';
-import DefaultHeaderRenderer from '../pipeline/features/default-header-renderer';
 import classnames from 'classnames';
 import {
   handleColumnRenderer,
@@ -17,7 +14,7 @@ const DEFAULT_BORDER_COLOR = '#D8E0E8';
 const DEFAULT_ODD_ROW_BG_COLOR = '#FFF';
 const DEFAULT_EVEN_ROW_BG_COLOR = '#F2F7FF';
 const DEFAULT_FONT_COLOR = '#1B2532';
-function BaseTable(props) {
+function BaseTable(props: any) {
   const {
     rowKey,
     columns: cols = [],
@@ -39,11 +36,12 @@ function BaseTable(props) {
     },
     style = {},
     cellProps = {},
+    extraProps = {},
     ...rest
   } = props;
 
-  const getSorts = (columns) => {
-    const _sortState = {};
+  const getSorts = (columns: any[]) => {
+    const _sortState: any = {};
     const sorts = columns.map((col) => {
       const { key, order } = col || {};
       if (order !== 'none') {
@@ -57,29 +55,32 @@ function BaseTable(props) {
     return { sorts, sortState: _sortState };
   };
 
-  const columns = handleColumnRenderer(cols);
+  const columns = handleColumnRenderer({
+    columns: cols,
+    customSvgIcons: extraProps?.customSvgIcons || undefined,
+  } as any);
 
   const pipeline = useTablePipeline({
     primaryKey: 'id',
   })
-    .input({ data, columns })
+    .input({ data, columns } as any)
     .use(groupHeader({ headHeight: hh, cellPadding: 0 }));
 
   const { sorts, sortState } = getSorts(pipeline.getColumns());
   pipeline.use(sort({ sorts, keepDataSource: true }));
   const pipelineProps = pipeline.getProps();
-  const { headerHeight, headerRenderer = DefaultHeaderRenderer } =
+  const { headerHeight, headerRenderer = defaultHeaderRenderer } =
     pipelineProps;
 
-  const handleCellProps = (...args) => {
+  const handleCellProps = (args: any) => {
     if (typeof cellProps === 'function') {
       return {
-        ...extraCellProps(...args),
-        ...cellProps(...args),
+        ...extraCellProps(args),
+        ...cellProps(args),
       };
     }
     return {
-      ...extraCellProps(...args),
+      ...extraCellProps(args),
       ...cellProps,
     };
   };

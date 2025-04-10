@@ -302,7 +302,7 @@ export function groupHeader(opts: {
                 >
                   <Ellipsis
                     ellipsis={item.ellipsis ? { tooltip: item.title } : false}
-                    style={{ ...getHeaderStyleFromColumn(column) }}
+                    // style={{ ...getHeaderStyleFromColumn(column) }}
                   >
                     {item.title}
                   </Ellipsis>

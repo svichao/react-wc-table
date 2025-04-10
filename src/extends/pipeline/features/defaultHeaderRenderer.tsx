@@ -2,7 +2,7 @@
 import React from 'react';
 import { getHeaderStyleFromColumn } from './config';
 
-const DefaultHeaderRenderer = ({ cells, columns, headerIndex }) => {
+export const defaultHeaderRenderer = ({ cells, columns, headerIndex }) => {
   columns.forEach((column, columnIndex) => {
     cells[columnIndex] = {
       ...cells[columnIndex],
@@ -17,5 +17,3 @@ const DefaultHeaderRenderer = ({ cells, columns, headerIndex }) => {
   });
   return cells;
 };
-
-export default DefaultHeaderRenderer;

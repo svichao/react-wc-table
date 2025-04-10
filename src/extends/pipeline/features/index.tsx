@@ -1,10 +1,3 @@
-/*
- * @Author: renjie.yin
- * @Date: 2022-04-14 11:32:30
- * @LastEditors: renjie.yin
- * @LastEditTime: 2022-10-26 09:21:03
- * @Description:
- */
 export { autoRowSpan, autoCellSpan } from './autoRowSpan';
 export { buildTree } from './buildTree';
 export { columnHover } from './columnHover';
@@ -28,6 +21,7 @@ export { treeSelect } from './treeSelect';
 export type { TreeSelectFeatureOptions } from './treeSelect';
 export { groupHeader } from './groupHeader';
 export { status } from './status';
+export { defaultHeaderRenderer } from './defaultHeaderRenderer';
 
 export { autoScrollRow } from './autoScrollRow';
 export { infiniteLoading } from './infiniteLoading';
