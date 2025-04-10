@@ -1,6 +1,6 @@
 import { get, uniqueId, isObject } from 'lodash-es';
 import { getFormat, getLinkFields } from './utils/format.js';
-// import { getEventIsExist } from "@/views/board/editor/pageScene/Chart/utils.js";
+import { getMApping } from './utils/condition';
 
 class BaseTable {
   constructor(
@@ -16,7 +16,8 @@ class BaseTable {
     bodyStyle = {},
     style = {},
     minColWidth = 96,
-    scrollWidth = 8,
+    scrollWidth,
+    extraProps,
   ) {
     this.columns = columns;
     this.data = data;
@@ -33,6 +34,7 @@ class BaseTable {
     this.style = style;
     this.minColWidth = minColWidth;
     this.scrollWidth = scrollWidth;
+    this.extraProps = extraProps;
     this.optToLabel = {
       yearRing: '年环比',
       quarterRing: '季环比',
@@ -56,7 +58,16 @@ class BaseTable {
       border: this.getBorder(),
       bodyStyle: this.getBodyStyle(),
       style: this.getStyle(),
+      extraProps: this.getExtraProps(),
     };
+  }
+
+  getExtraProps() {
+    return this.extraProps || {};
+  }
+
+  setExtraProps(extraProps) {
+    this.extraProps = extraProps || {};
   }
 
   getStyle() {
@@ -255,9 +266,6 @@ class BaseTable {
 
   // 从图表数据更新表格
   updateFromChartData({ chartData = {}, style = {}, chartStatus = {}, emit }) {
-    console.log('chartStatus: ', chartStatus);
-    console.log('chartData: ', chartData);
-    console.log('style: ', style);
     const { dataConfig = {}, dataResult = {} } = chartData || {};
     const { values, extraResult } = dataResult || {};
     const { theme, pagination = {}, content = {} } = style || {};
@@ -281,7 +289,6 @@ class BaseTable {
     if (isCompare) {
       data = this.transDataByCalc({ data, dataConfig });
     }
-    console.log('最终data----------------------------: ', data);
     this.setData(data);
 
     // 表格样式
@@ -357,6 +364,7 @@ class BaseTable {
     // 下钻 辅助字段
     let drillColumns = [];
     let drillParentColumn;
+    let disableRowIndex = 1;
     if (levels.length) {
       drillParentColumn = levels[drillDownLevel];
       drillColumns = drillParentColumn?.extra?.assist || [];
@@ -378,6 +386,22 @@ class BaseTable {
         }
       }
     }
+
+    // 条件格式
+    const isCompare =
+      compareOn.show &&
+      !!compareOn?.metricField?.length &&
+      !!compareOn?.compareOpt?.length;
+    const tableData = isCompare
+      ? this.transDataByCalc({ data: dataResult.values, dataConfig })
+      : dataResult.values;
+    const { backMapping, textMapping, iconMapping, numberMapping } = getMApping(
+      dataConfig?.columns,
+      {
+        disableRowIndex,
+        tableData,
+      },
+    );
 
     // 同环比
     columns = [...columns, ...this.getFieldsByCompareOn(compareOn, columns)];
@@ -433,6 +457,33 @@ class BaseTable {
           };
         }
 
+        if (backMapping?.length) {
+          backMapping.forEach(({ field, mapping }) => {
+            if (field === key) {
+              column.backMapping = mapping;
+            }
+          });
+        }
+        if (textMapping?.length) {
+          textMapping.forEach(({ field, mapping }) => {
+            if (field === key) {
+              column.textMapping = mapping;
+            }
+          });
+        }
+        if (iconMapping?.length) {
+          iconMapping.forEach(({ field, mapping }) => {
+            if (field === key) {
+              column.iconMapping = mapping;
+            }
+          });
+        }
+        if (numberMapping) {
+          if (numberMapping[key]) {
+            column.numberMapping = numberMapping[key].mapping;
+          }
+        }
+
         // 同环比对比指标字段
         if (compareOn.metricField.includes(key)) {
           column.isMetricField = true;
@@ -445,7 +496,6 @@ class BaseTable {
     };
 
     columns = columns.map(processColumn);
-    console.log('最终columns:------------------ ', columns);
     return columns;
   }
 
