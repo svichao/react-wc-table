@@ -20,30 +20,17 @@ yarn add @bdlite/table
 
 ## 使用方法
 
-1. 在项目中导入工具：
+1. 在项目中直接导入使用：
 
    ```javascript
-   import { generateWebComponent } from '@bdlite/table';
+   import { BaseTable } from '@bdlite/table';
    ```
 
-2. 使用工具将 React 组件转换为 WebComponent：
-
-   ```javascript
-   const MyWebComponent = generateWebComponent(
-     MyReactComponent,
-     'my-web-component',
-   );
-   ```
-
-3. 在 HTML 中使用生成的 WebComponent：
+2. 在 HTML 中使用：
 
    ```html
-   <my-web-component></my-web-component>
+   <react-base-table></react-base-table>
    ```
-
-## 示例
-
-请参考 `examples` 文件夹中的示例代码，了解如何在实际项目中使用该工具。
 
 ## 贡献
 
