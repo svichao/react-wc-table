@@ -1,6 +1,7 @@
 {
   "name": "@bdlite/table",
-  "version": "1.0.7",
+  "version": "1.0.10",
+  "private": false,
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -33,12 +34,15 @@
   },
   "dependencies": {
     "@r2wc/react-to-web-component": "^2.0.4",
+    "antd": "^5.24.0",
     "babel-plugin-import": "^1.13.8",
     "classnames": "^2.2.6",
     "father": "^4.0.0-rc.2",
     "memoize-one": "^6.0.0",
     "prop-types": "^15.7.2",
     "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-fast-compare": "^3.0.1",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "styled-components": "^5.2.1"
@@ -49,7 +53,6 @@
     "@types/react-window": "^1.8.5",
     "@types/styled-components": "^5.1.9",
     "@umijs/test": "^3.0.5",
-    "antd": "^5.24.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "dumi": "^1.1.0",
     "gh-pages": "^3.0.0",
@@ -64,5 +67,11 @@
     "@types/react": "^18.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  }
+  },
+  "keywords": [
+    "react",
+    "web-components",
+    "table",
+    "bdlite/table"
+  ]
 }

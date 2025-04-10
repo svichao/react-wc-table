@@ -7,7 +7,6 @@ import {
   handleColumnRenderer,
   extraCellProps,
 } from '../pipeline/features/config';
-import 'react-base-table/styles.css';
 import './style.less';
 
 const DEFAULT_BORDER_COLOR = '#D8E0E8';
