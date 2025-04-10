@@ -1,0 +1,68 @@
+.bdlite-react-base-table-wrapper {
+  .BaseTable {
+    width: 100%;
+
+    .BaseTable__table-main {
+      outline: none;
+    }
+
+    .base-table-header-group,
+    .BaseTable__header-row,
+    .BaseTable__header-cell,
+    .BaseTable__row {
+      border-bottom: none;
+    }
+
+    .BaseTable__header-cell,
+    .BaseTable__row-cell {
+      border-right: none;
+    }
+
+    // 行border
+    &.has-horizon-border {
+      .base-table-header-group,
+      .BaseTable__header-cell,
+      .BaseTable__row {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: var(--bdlite-base-table-border-color);
+      }
+      .BaseTable__row:last-child {
+        border-bottom: none;
+      }
+    }
+
+    // 列border
+    &.has-vertical-border {
+      .BaseTable__header-cell,
+      .BaseTable__row-cell {
+        &:not(:last-child) {
+          border-right-width: 1px;
+          border-right-style: solid;
+          border-right-color: var(--bdlite-base-table-border-color);
+        }
+      }
+    }
+
+    // 行背景色
+    .BaseTable__row {
+      &:nth-child(odd) {
+        background-color: var(--bdlite-base-table-odd-row-bg-color);
+      }
+      &:nth-child(even) {
+        background-color: var(--bdlite-base-table-even-row-bg-color);
+      }
+    }
+  }
+  .BaseTable__column-resizer {
+    background-color: #006bff;
+  }
+  .BaseTable__header-cell-text {
+    white-space: nowrap;
+  }
+  .base-table-group-header {
+    &:not(:last-child) {
+      border-bottom: none;
+    }
+  }
+}

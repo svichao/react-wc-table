@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    ["import", {
-      "libraryName": "antd",
-      "libraryDirectory": "es",  // 指向 antd 的 ES 模块目录 
-      "style": "css"             // 自动加载组件对应的 CSS 样式 
-    }]
-  ]
-}
