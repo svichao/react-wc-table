@@ -101,7 +101,7 @@ Column.propTypes = {
    * business inject
    *
    */
-  type: PropTypes.object,
+  // type: PropTypes.object,
 };
 
 Column.Alignment = Alignment;

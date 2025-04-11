@@ -8,8 +8,8 @@ class BaseTable {
     data = [],
     pagination,
     rowKey = 'id',
-    width,
-    height,
+    width = 0,
+    height = 0,
     showPagination,
     container,
     border = {},
@@ -126,7 +126,7 @@ class BaseTable {
     const _container = container || this.container;
     if (_container instanceof HTMLElement) {
       this.setContainer(_container);
-      const { offsetWidth, offsetHeight } = _container;
+      const { offsetWidth = 0, offsetHeight = 0 } = _container;
       this.setWidth(offsetWidth);
       this.setHeight(
         offsetHeight - (this.showPagination ? this.paginationHeight : 0),
@@ -280,7 +280,7 @@ class BaseTable {
       );
     }
 
-    let data = values;
+    let data = values.map((item) => ({ ...item, id: this.generateUniqueId() }));
     const isCompare =
       compareOn.show &&
       !!compareOn?.metricField?.length &&
@@ -485,7 +485,10 @@ class BaseTable {
         }
 
         // 同环比对比指标字段
-        if (compareOn.metricField.includes(key)) {
+        if (
+          compareOn?.metricField?.length &&
+          compareOn.metricField.includes(key)
+        ) {
           column.isMetricField = true;
           column.compareOn = compareOn;
         }

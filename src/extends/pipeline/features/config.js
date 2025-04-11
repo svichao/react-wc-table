@@ -139,9 +139,10 @@ export const processColumn = ({ column, ...rest }) => {
             compareOpt.forEach((j) => {
               ret.push(rowData[`${column.key}##${j}`].v);
             });
-            content = ret.map((val) => {
+            content = ret.map((val, i) => {
               return (
                 <span
+                  key={i}
                   style={{ color: getColor(val, compareOn.style), flex: 1 }}
                 >
                   {getFieldMapValue(val)}

@@ -117,4 +117,6 @@ const props: any = {
 // r2wc类型转换：string | number | boolean | function | json
 const Main = r2wc(TableWrapper, { props });
 
-customElements.define('react-base-table', Main);
+if (!customElements.get('react-base-table')) {
+  customElements.define('react-base-table', Main);
+}
