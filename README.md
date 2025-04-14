@@ -1,10 +1,9 @@
-# React WebComponent Generator
+# React WebComponent Table
 
-一个用于生成 React WebComponent 的工具，帮助开发者快速创建可复用的 Web 组件。
+一个可以用于 Vue 的 React WebComponent Table 组件，适用于高性能的场景。
 
 ## 特性
 
-- 支持将 React 组件打包为 WebComponent。
 - 简单易用，快速集成。
 - 支持自定义配置。
 

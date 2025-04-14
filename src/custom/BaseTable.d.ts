@@ -1,117 +1,178 @@
 import { CSSProperties } from 'react';
 
 interface Column {
-  fieldId: string;
-  columnName?: string;
-  title?: string;
-  name?: string;
+  fieldId?: string;
   key?: string;
   id?: string;
+  name?: string;
+  title?: string;
+  columnName?: string;
+  editorTitle?: string;
   children?: Column[];
-  config?: Record<string, any>;
   width?: number;
+  resizable?: boolean;
+  align?: string;
+  order?: string;
+  hidden?: boolean;
   isLink?: boolean;
+  handleClick?: (params: {
+    column: Column;
+    cellData: any;
+    event: MouseEvent;
+  }) => void;
+  backMapping?: any;
+  textMapping?: any;
+  iconMapping?: any;
+  numberMapping?: any;
   isMetricField?: boolean;
-  compareOn?: Record<string, any>;
-  header?: Record<string, any>;
+  compareOn?: any;
+  config?: {
+    orderDirection?: string;
+    hideField?: number;
+    textAlign?: string;
+    dataType?: { type: string };
+  };
+  header?: any;
+  features?: {
+    sortable?: boolean;
+  };
   cellRenderer?: (params: {
-    rowIndex: number;
     cellData: any;
     column: Column;
+    rowIndex?: number;
   }) => any;
+  [key: string]: any;
 }
 
 interface Pagination {
-  pageSize: number;
-  current: number;
-  total: number;
+  pageSize?: number;
+  current?: number;
+  total?: number;
   hideOnSinglePage?: boolean;
   onChange?: (pageNum: number, pageSize: number) => void;
 }
 
-interface ChartData {
-  dataConfig?: Record<string, any>;
-  dataResult?: Record<string, any>;
-  eventConfig?: Record<string, any>;
+interface Border {
+  horizon?: boolean;
+  vertical?: boolean;
+  color?: string;
+}
+
+interface BodyStyle {
+  fontWeight?: string;
+  fontSize?: number;
+  color?: string;
+  oddRowBgColor?: string;
+  evenRowBgColor?: string;
 }
 
 interface Style {
-  theme?: Record<string, any>;
-  pagination?: Record<string, any>;
-  content?: Record<string, any>;
-  colWidth?: Record<string, any>;
-  indexColumn?: { show: boolean };
-  superTitle?: { show: boolean; group?: any[] };
-  header?: Record<string, any>;
+  colWidth?: {
+    mode?: string;
+    config?: Record<string, { auto?: boolean; width?: number }>;
+  };
+  indexColumn?: {
+    show?: boolean;
+  };
+  [key: string]: any;
+}
+
+interface CompareOn {
+  show?: boolean;
+  position?: string;
+  compareOpt?: string[];
+  metricField?: string[];
+  content?: string;
+}
+
+interface ChartData {
+  dataConfig?: any;
+  dataResult?: any;
+  eventConfig?: any;
+}
+
+interface StyleData {
+  theme?: any;
+  pagination?: Pagination;
+  content?: any;
 }
 
 interface ChartStatus {
-  page?: { pageSize: number; pageNum: number };
+  page?: {
+    pageSize?: number;
+    pageNum?: number;
+  };
   drillDownLevel?: number;
 }
 
-interface EmitFunction {
-  (event: string, payload: Record<string, any>): void;
+interface BaseTableConstructorParams {
+  columns?: Column[];
+  data?: any[];
+  pagination?: Pagination;
+  rowKey?: string;
+  width?: number;
+  height?: number;
+  showPagination?: boolean;
+  container?: HTMLElement;
+  border?: Border;
+  bodyStyle?: BodyStyle;
+  style?: Style;
+  minColWidth?: number;
+  scrollWidth?: number;
+  extraProps?: Record<string, any>;
+  onColumnResize?: (column: Column, width: number) => void;
 }
 
 declare class BaseTable {
-  constructor(
-    columns?: Column[],
-    data?: any[],
-    pagination?: Pagination,
-    rowKey?: string,
-    width?: number,
-    height?: number,
-    showPagination?: boolean,
-    container?: HTMLElement,
-    border?: Record<string, any>,
-    bodyStyle?: CSSProperties,
-    style?: CSSProperties,
-    minColWidth?: number,
-    scrollWidth?: number,
-  );
+  constructor(params: BaseTableConstructorParams);
 
   getProps(): Record<string, any>;
-  getStyle(): CSSProperties;
-  setStyle(style: CSSProperties): void;
-  getBodyStyle(): CSSProperties;
-  setBodyStyle(bodyStyle: CSSProperties): void;
-  getBorder(): Record<string, any>;
-  setBorder(border: Record<string, any>): void;
+  getColumnResizeFn(): (params: { column: Column; width: number }) => void;
+  getExtraProps(): Record<string, any>;
+  setExtraProps(extraProps: Record<string, any>): void;
+  getStyle(): Style;
+  setStyle(style: Style): void;
+  getBodyStyle(): BodyStyle;
+  setBodyStyle(bodyStyle: BodyStyle): void;
+  getBorder(): Border;
+  setBorder(border: Border): void;
   getContainer(): HTMLElement | undefined;
   setContainer(container: HTMLElement): void;
-  getWidth(): number | undefined;
+  getWidth(): number;
   setWidth(width: number): void;
-  getHeight(): number | undefined;
+  getHeight(): number;
   setHeight(height: number): void;
   updateTableSize(container?: HTMLElement): void;
+  observeContainer(container: HTMLElement): void;
+  removeContainerObserver(): void;
   getColumns(): Column[];
   setColumns(columns: Column[]): void;
   getData(): any[];
   setData(data: any[]): void;
   getPagination(): Pagination | false;
   setPagination(pagination: Pagination): void;
-  getPaginationShow(): boolean | undefined;
+  getPaginationShow(): boolean;
   setPaginationShow(showPagination: boolean): void;
   flattenColumns(columns: Column[]): Column[];
   flattenArrayToString(array: any[]): string[];
   getCellOriginValue(fieldId: string, value: any, dataCell: any): any;
-  getColWidth(column: Column, style: Style, columnsLen: number): number;
-  frozenColumns(columns: Column[], content: Record<string, any>): Column[];
+  updateColumnsWidth(): void;
+  getColWidth(column: Column): number;
+  frozenColumns(columns: Column[], content: any): Column[];
   updateFromChartData(params: {
     chartData?: ChartData;
-    style?: Style;
+    style?: StyleData;
     chartStatus?: ChartStatus;
-    emit?: EmitFunction;
+    emit?: (event: string, payload: any) => void;
   }): this;
   handleColumns(params: {
     chartData?: ChartData;
-    style?: Style;
+    style?: StyleData;
     chartStatus?: ChartStatus;
-    emit?: EmitFunction;
+    emit?: (event: string, payload: any) => void;
   }): Column[];
   handleIndexColumn(columns: Column[], style: Style): Column[];
-  getSortOrder(column: Column): 'asc' | 'desc' | 'none';
+  getSortOrder(column: Column): string;
   getFormatedValue(column: Column, value: any): any;
   formatColumn(column: Column): Column;
   generateColumnsMap(columns: Column[]): Record<string, Column>;
@@ -123,23 +184,13 @@ declare class BaseTable {
   generateUniqueId(): string;
   getAlign(column: Column): string;
   getFieldAlignType(column: Column): string;
-  compareObjects(
-    obj1: Record<string, any>,
-    obj2: Record<string, any>,
-    path?: string,
-  ): string[];
+  compareObjects(obj1: any, obj2: any, path?: string): string[];
   filterColumns(columns: Column[]): Column[];
   getColumnTitle(column: Column): string;
   getColumnsLength(columns: Column[]): number;
-  transDataByCalc(params: {
-    data: any[];
-    dataConfig: Record<string, any>;
-  }): any[];
+  transDataByCalc(params: { data: any[]; dataConfig: any }): any[];
   calcNumber(Objcur: any, Objpre: any, isPercent: boolean): any;
-  getFieldsByCompareOn(
-    compareOn: Record<string, any>,
-    columns: Column[],
-  ): Column[];
+  getFieldsByCompareOn(compareOn: CompareOn, columns: Column[]): Column[];
   getFieldName(fieldData: Column): string;
 }
 
