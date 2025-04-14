@@ -3,7 +3,7 @@ import { getFormat, getLinkFields } from './utils/format.js';
 import { getMApping } from './utils/condition';
 
 class BaseTable {
-  constructor(
+  constructor({
     columns = [],
     data = [],
     pagination,
@@ -18,7 +18,8 @@ class BaseTable {
     minColWidth = 96,
     scrollWidth,
     extraProps,
-  ) {
+    onColumnResize,
+  }) {
     this.columns = columns;
     this.data = data;
     this.pagination = pagination;
@@ -35,6 +36,7 @@ class BaseTable {
     this.minColWidth = minColWidth;
     this.scrollWidth = scrollWidth;
     this.extraProps = extraProps;
+    this.columnResizeFn = onColumnResize;
     this.optToLabel = {
       yearRing: '年环比',
       quarterRing: '季环比',
@@ -48,7 +50,7 @@ class BaseTable {
   }
 
   getProps() {
-    return {
+    const props = {
       columns: this.getColumns(),
       data: this.getData(),
       pagination: this.getPagination(),
@@ -59,6 +61,14 @@ class BaseTable {
       bodyStyle: this.getBodyStyle(),
       style: this.getStyle(),
       extraProps: this.getExtraProps(),
+      columnResize: this.getColumnResizeFn(),
+    };
+    return props;
+  }
+
+  getColumnResizeFn() {
+    return ({ column, width }) => {
+      this.columnResizeFn(column, width);
     };
   }
 
@@ -131,6 +141,33 @@ class BaseTable {
       this.setHeight(
         offsetHeight - (this.showPagination ? this.paginationHeight : 0),
       ); // 减去分页高度
+      this.updateColumnsWidth();
+    }
+  }
+
+  observeContainer(container) {
+    if (!container) return;
+    if (!this.container) {
+      this.setContainer(container);
+    }
+
+    if (!this.resizeObserver) {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          if (entry.target === this.container) {
+            this.updateTableSize(this.container);
+          }
+        }
+      });
+    }
+
+    this.resizeObserver.observe(this.container);
+  }
+
+  removeContainerObserver() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
     }
   }
 
@@ -201,11 +238,24 @@ class BaseTable {
     return dataCell ? dataCell[fieldId] : value;
   }
 
-  getColWidth(column, style, columnsLen) {
-    const { mode, config } = style.colWidth;
+  updateColumnsWidth() {
+    if (!this.columns?.length) return;
+    const processColumn = (column) => {
+      if (column.children && column.children.length) {
+        column.children = column.children.map(processColumn);
+      } else {
+        column.width = this.getColWidth(column);
+      }
+      return column;
+    };
+    this.columns.map(processColumn);
+  }
+
+  getColWidth(column) {
+    const { mode, config } = this.styleData.colWidth;
 
     if (mode === 'auto') {
-      return Math.max(this.minColWidth, this.width / columnsLen);
+      return Math.max(this.minColWidth, this.width / this.columnsLen);
     }
 
     if (mode === 'custom') {
@@ -351,6 +401,7 @@ class BaseTable {
     let needLinkFields = levels.length
       ? linkage.concat(levels.slice(0, levels.length - 1))
       : linkage;
+    this.styleData = style;
     if (skip.length) {
       needLinkFields = needLinkFields.concat(skip);
     }
@@ -413,14 +464,14 @@ class BaseTable {
     columns = this.frozenColumns(columns, content);
 
     // 叶子列总数
-    const columnsLen = this.getColumnsLength(columns);
+    this.columnsLen = this.getColumnsLength(columns);
     // 处理列宽，添加下钻事件
     const processColumn = (column) => {
       if (column.children && column.children.length) {
         column.children = column.children.map(processColumn);
         column.header = header;
       } else {
-        column.width = this.getColWidth(column, style, columnsLen);
+        column.width = this.getColWidth(column);
         column.header = {
           ...header,
           color: theme.basicColors[0],
@@ -552,7 +603,7 @@ class BaseTable {
       align,
       order,
       features: {
-        sortable: !!column.config?.orderDirection,
+        sortable: !!column.config?.orderDirection || true, // TODO默认展示
       },
       hidden: column.config?.hideField === 1,
       ellipsis: false,

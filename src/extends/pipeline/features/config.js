@@ -33,6 +33,10 @@ export const getColor = (cellData, colorMode) => {
 };
 
 export const processColumn = ({ column, ...rest }) => {
+  // 如果列已经被处理过，直接返回
+  if (column._processed) {
+    return column;
+  }
   if (column?.children?.length) {
     column.children = column.children.map((column) =>
       processColumn({ column, ...rest }),
@@ -64,7 +68,7 @@ export const processColumn = ({ column, ...rest }) => {
         }
       };
       content = (
-        <a href="#!" onClick={onClick}>
+        <a href="#" onClick={onClick}>
           {content}
         </a>
       );
@@ -177,6 +181,9 @@ export const processColumn = ({ column, ...rest }) => {
       </Ellipsis>
     );
   };
+
+  // 标记列已处理
+  column._processed = true;
   return column;
 };
 
