@@ -17,7 +17,7 @@ const Ellipsis = (props) => {
     <div
       className="bdlite-react-base-table-ellipsis"
       style={{
-        width: '100%',
+        maxWidth: '100%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',

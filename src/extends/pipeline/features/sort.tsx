@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { CSSProperties, ReactNode } from 'react';
 import { ArtColumn, SortItem, SortOrder } from '../interfaces';
 import { TablePipeline } from '../pipeline';
@@ -9,8 +8,6 @@ import {
   smartCompare,
   safeHeaderRender,
 } from '../utils/utils';
-import { getHeaderStyleFromColumn } from './config';
-import Ellipsis from './ellipsis';
 
 interface SortIconProps {
   style?: CSSProperties;
@@ -105,38 +102,43 @@ function DefaultSortHeaderCell({
   sortOptions,
 }: SortHeaderCellProps) {
   // 通过 justify-content 来与 col.align 保持对齐方向一致
-  const justifyContent =
-    column.align === 'right'
-      ? 'flex-end'
-      : column.align === 'center'
-      ? 'center'
-      : 'flex-start';
+  const align = column.header?.align || column.align;
+  let justifyContent;
+  let textAlign = align;
+  if (align === 'right') {
+    justifyContent = 'flex-end';
+  } else if (align === 'center') {
+    justifyContent = 'center';
+  } else {
+    justifyContent = 'flex-start';
+  }
 
-  const renderChildren = (column) => {
-    const style = column.ellipsis
-      ? getHeaderStyleFromColumn(column)
-      : { width: 'calc(100% - 16px)' };
-    return (
-      <Ellipsis
-        ellipsis={column.ellipsis ? { tooltip: children } : false}
-        style={style}
-      >
-        {children}
-      </Ellipsis>
-    );
+  const renderChildren = (column: any) => {
+    // const style = column.ellipsis
+    //   ? getHeaderStyleFromColumn(column)
+    //   : { width: 'calc(100% - 16px)' };
+    return children;
+    // (
+    //   <Ellipsis
+    //     ellipsis={column.ellipsis ? { tooltip: children } : false}
+    //     style={style}
+    //   >
+    //     {children}
+    //   </Ellipsis>
+    // );
   };
 
   return (
     <div
       onClick={onToggle}
       style={{
-        justifyContent,
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         userSelect: 'none',
         width: '100%',
-        ...getHeaderStyleFromColumn(column),
+        textAlign,
+        justifyContent,
       }}
     >
       {renderChildren(column)}

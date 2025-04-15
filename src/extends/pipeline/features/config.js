@@ -1,6 +1,7 @@
 import Ellipsis from './ellipsis';
 import React from 'react';
 import Progress from 'antd/es/progress';
+import Tooltip from 'antd/es/tooltip';
 
 export const getFieldMapValue = (value) => {
   return value?.d || value?.v || value || '-';
@@ -32,6 +33,18 @@ export const getColor = (cellData, colorMode) => {
   return color;
 };
 
+export const isShowText = (condition = {}) => {
+  const { colorStepData, iconData, mode } = condition;
+  switch (mode) {
+    case 'colorStep': // 色阶
+      return colorStepData?.colorSetting?.hideText === 1;
+    case 'icon': // 图标
+      return iconData?.showType === 'if';
+    default:
+      return true;
+  }
+};
+
 export const processColumn = ({ column, ...rest }) => {
   // 如果列已经被处理过，直接返回
   if (column._processed) {
@@ -58,7 +71,7 @@ export const processColumn = ({ column, ...rest }) => {
     let content = originalCellRenderer
       ? originalCellRenderer({ cellData, column, rowData, ...rest })
       : cellData;
-    let style = {};
+    let style = { ...getCellStyleFromColumn(column) };
     const { isLink, handleClick, compareOn } = column;
     // 下钻功能
     if (isLink) {
@@ -73,53 +86,70 @@ export const processColumn = ({ column, ...rest }) => {
         </a>
       );
     }
-    // 条件格式
+    // 条件格式 色阶
     if (column.backMapping) {
       const backMappingRet = column.backMapping(cellData, rowData);
-      style.backgroundColor = backMappingRet.fill;
-      column.style = {
-        ...(column?.style || {}),
-        backgroundColor: backMappingRet.fill,
-      };
+      if (backMappingRet?.fill) {
+        style.backgroundColor = backMappingRet.fill;
+        column.style = {
+          ...(column?.style || {}),
+          backgroundColor: backMappingRet.fill,
+        };
+      }
     }
+    // 文本/背景
     if (column.textMapping) {
       const textMappingret = column.textMapping(cellData, rowData);
-      style.color = textMappingret.fill;
+      if (textMappingret?.fill) {
+        style.color = textMappingret.fill;
+      }
     }
+    // 文字显示隐藏
+    if (column.condition) {
+      content = isShowText(column.condition) ? content : null;
+    }
+    // 图标集
     if (column.iconMapping) {
       const iconMappingret = column.iconMapping(cellData, rowData);
-      content = (
-        <span style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-          <img
-            style={{ width: '14px', marginRight: '2px' }}
-            src={customSvgIconsMap[iconMappingret.icon]}
-          />
-          {content}
-        </span>
-      );
+      if (iconMappingret?.icon) {
+        content = (
+          <span
+            style={{ display: 'flex', alignItems: 'center', flex: 1, ...style }}
+          >
+            <img
+              style={{ width: '14px', marginRight: '2px' }}
+              src={customSvgIconsMap[iconMappingret.icon]}
+            />
+            {content}
+          </span>
+        );
+      }
     }
+    // 数据条
     if (column.numberMapping) {
       const numberMappingret = column.numberMapping(getFieldMapValue(cellData));
-      content = (
-        <span
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flex: 1,
-            justifyContent: 'space-between',
-          }}
-        >
-          <Progress
-            style={{ width: '50%' }}
-            size="small"
-            showInfo={false}
-            percent={numberMappingret.percent}
-            strokeColor={numberMappingret.color}
-            trailColor={numberMappingret.lineColor}
-          />
-          {content}
-        </span>
-      );
+      if (numberMappingret?.percent) {
+        content = (
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flex: 1,
+              justifyContent: 'space-between',
+            }}
+          >
+            <Progress
+              style={{ width: '50%' }}
+              size="small"
+              showInfo={false}
+              percent={numberMappingret.percent}
+              strokeColor={numberMappingret.color}
+              trailColor={numberMappingret.lineColor}
+            />
+            {content}
+          </span>
+        );
+      }
     }
 
     // 同环比功能
@@ -143,17 +173,20 @@ export const processColumn = ({ column, ...rest }) => {
             compareOpt.forEach((j) => {
               ret.push(rowData[`${column.key}##${j}`].v);
             });
-            content = ret.map((val, i) => {
-              return (
-                <span
-                  key={i}
-                  style={{ color: getColor(val, compareOn.style), flex: 1 }}
-                >
-                  {getFieldMapValue(val)}
-                </span>
-              );
-            });
+            content = ret
+              .filter((c) => c !== null)
+              .map((val, i) => {
+                return (
+                  <span
+                    key={i}
+                    style={{ color: getColor(val, compareOn.style), flex: 1 }}
+                  >
+                    {getFieldMapValue(val)}
+                  </span>
+                );
+              });
             style.display = 'flex';
+            style.width = '100%';
           }
         }
       }
@@ -169,12 +202,39 @@ export const processColumn = ({ column, ...rest }) => {
   };
 
   column.headerRenderer = ({ column, ...rest }) => {
-    const content = originalHeaderRenderer
+    let content = originalHeaderRenderer
       ? originalHeaderRenderer({ column, ...rest })
       : column.title;
+
+    // 字段显示内容
+    const { showDesc, editorDesc } = column;
+    let tooltip = column.title;
+    let showEllipsis = !!column.ellipsis;
+    if (showDesc && editorDesc) {
+      tooltip = editorDesc;
+      return (
+        <Tooltip title={tooltip}>
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              borderBottomWidth: '1px',
+              borderBottomStyle: 'dashed',
+              height: '20px',
+              lineHeight: '20px',
+            }}
+          >
+            {content}
+          </span>
+        </Tooltip>
+      );
+    }
     return (
       <Ellipsis
-        ellipsis={column.ellipsis ? { tooltip: column.title } : false}
+        ellipsis={showEllipsis ? { tooltip } : false}
         // style={{ ...getHeaderStyleFromColumn(column) }}
       >
         {content}
@@ -250,5 +310,23 @@ export const getHeaderStyleFromColumn = (column) => {
     style.display = 'none';
   }
 
+  return style;
+};
+
+export const getCellStyleFromColumn = (column) => {
+  if (!column) return {};
+
+  const style = {};
+
+  if (column.align) {
+    style.textAlign = column.align;
+    if (column.align === 'right') {
+      style.justifyContent = 'flex-end';
+    } else if (column.align === 'center') {
+      style.justifyContent = 'center';
+    } else {
+      style.justifyContent = 'flex-start';
+    }
+  }
   return style;
 };
