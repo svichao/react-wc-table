@@ -54,7 +54,7 @@
     "@types/styled-components": "^5.1.9",
     "@umijs/test": "^3.0.5",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "dumi": "^1.1.0",
+    "dumi": "^2.4.0",
     "gh-pages": "^3.0.0",
     "less-plugin-sass2less": "^1.2.0",
     "lint-staged": "^10.0.7",
@@ -73,5 +73,9 @@
     "web-components",
     "table",
     "bdlite/table"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svichao/react-wc-table"
+  }
 }
