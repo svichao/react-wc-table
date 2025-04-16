@@ -90,7 +90,7 @@ export function multiSelect(opts: MultiSelectFeatureOptions = {}) {
     /** 所有有效的 keys（disable 状态为 false） */
     const allKeys: string[] = [];
 
-    dataSource.forEach((row, rowIndex) => {
+    dataSource?.forEach((row, rowIndex) => {
       const rowKey = safeGetRowKey(primaryKey, row, rowIndex);
       fullKeySet.add(rowKey);
       // 在 allKeys 中排除被禁用的 key

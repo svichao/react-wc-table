@@ -1,7 +1,7 @@
-import Ellipsis from './ellipsis';
-import React from 'react';
 import Progress from 'antd/es/progress';
 import Tooltip from 'antd/es/tooltip';
+import React from 'react';
+import Ellipsis from './ellipsis';
 
 export const getFieldMapValue = (value) => {
   return value?.d || value?.v || value || '-';
@@ -202,9 +202,10 @@ export const processColumn = ({ column, ...rest }) => {
   };
 
   column.headerRenderer = ({ column, ...rest }) => {
-    let content = originalHeaderRenderer
-      ? originalHeaderRenderer({ column, ...rest })
-      : column.title;
+    let content =
+      typeof originalHeaderRenderer === 'function'
+        ? originalHeaderRenderer({ column, ...rest })
+        : column.title;
 
     // 字段显示内容
     const { showDesc, editorDesc } = column;
