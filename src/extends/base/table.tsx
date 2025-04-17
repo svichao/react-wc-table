@@ -1,11 +1,11 @@
+import classnames from 'classnames';
 import React from 'react';
 import Table from '../../base';
-import { groupHeader, sort, defaultHeaderRenderer } from '../pipeline/features';
 import { useTablePipeline } from '../pipeline';
-import classnames from 'classnames';
+import { defaultHeaderRenderer, groupHeader, sort } from '../pipeline/features';
 import {
-  handleColumnRenderer,
   extraCellProps,
+  handleColumnRenderer,
 } from '../pipeline/features/config';
 import './style.less';
 
@@ -36,6 +36,7 @@ function BaseTable(props: any) {
     style = {},
     cellProps = {},
     extraProps = {},
+    onColumnSort,
     ...rest
   } = props;
 
@@ -66,7 +67,9 @@ function BaseTable(props: any) {
     .use(groupHeader({ headHeight: hh, cellPadding: 0 }));
 
   const { sorts, sortState } = getSorts(pipeline.getColumns());
-  pipeline.use(sort({ sorts, keepDataSource: true }));
+  pipeline.use(
+    sort({ sorts, keepDataSource: true, onChangeSorts: onColumnSort }),
+  );
   const pipelineProps = pipeline.getProps();
   const { headerHeight, headerRenderer = defaultHeaderRenderer } =
     pipelineProps;
