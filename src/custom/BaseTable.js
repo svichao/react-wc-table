@@ -1,6 +1,6 @@
-import { get, uniqueId, isObject } from 'lodash-es';
-import { getFormat, getLinkFields } from './utils/format.js';
+import { get, isObject, uniqueId } from 'lodash-es';
 import { getMApping } from './utils/condition';
+import { getFormat, getLinkFields } from './utils/format.js';
 
 class BaseTable {
   constructor({
@@ -19,6 +19,7 @@ class BaseTable {
     scrollWidth,
     extraProps,
     onColumnResize,
+    onColumnSort,
   }) {
     this.columns = columns;
     this.data = data;
@@ -36,7 +37,8 @@ class BaseTable {
     this.minColWidth = minColWidth;
     this.scrollWidth = scrollWidth;
     this.extraProps = extraProps;
-    this.columnResizeFn = onColumnResize;
+    this.onColumnResize = onColumnResize;
+    this.onColumnSort = onColumnSort;
     this.optToLabel = {
       yearRing: '年环比',
       quarterRing: '季环比',
@@ -62,13 +64,31 @@ class BaseTable {
       style: this.getStyle(),
       extraProps: this.getExtraProps(),
       columnResize: this.getColumnResizeFn(),
+      columnSort: this.getColumnSortFn(),
     };
     return props;
   }
 
+  getColumnSortFn() {
+    return (props) => {
+      console.log('props: ', props);
+      // 多重排序时，取最后一个
+      if (props?.length) {
+        const { key, order } = props[props?.length - 1] || {};
+        let column = {};
+        if (this.fieldsData?.length && key) {
+          column = this.fieldsData.find((item) => item.key === key);
+        }
+        this.onColumnSort({ column, key, order: this.getSortOrderRev(order) });
+      } else {
+        this.onColumnSort({ order: '' });
+      }
+    };
+  }
+
   getColumnResizeFn() {
     return ({ column, width }) => {
-      this.columnResizeFn(column, width);
+      this.onColumnResize(column, width);
     };
   }
 
@@ -402,6 +422,7 @@ class BaseTable {
       ? linkage.concat(levels.slice(0, levels.length - 1))
       : linkage;
     this.styleData = style;
+    this.fieldsData = fields.columns || [];
     if (skip.length) {
       needLinkFields = needLinkFields.concat(skip);
     }
@@ -580,6 +601,13 @@ class BaseTable {
     return 'none';
   }
 
+  getSortOrderRev(order) {
+    if (order === 'asc') return 'ascending';
+    if (order === 'desc') return 'descending';
+    if (order === 'none') return 'custom';
+    return;
+  }
+
   getFormatedValue(column, value) {
     const getter = this.valueFormatter.get(column.fieldId);
     if (getter) {
@@ -587,6 +615,13 @@ class BaseTable {
     } else {
       return this.getFieldMapValue(value);
     }
+  }
+
+  getSortable(sortable) {
+    if (typeof sortable === 'undefined') {
+      return true;
+    }
+    return !!sortable;
   }
 
   // 格式化列
@@ -603,7 +638,7 @@ class BaseTable {
       align,
       order,
       features: {
-        sortable: !!column.config?.orderDirection || true, // TODO默认展示
+        sortable: this.getSortable(column.config?.orderDirection),
       },
       hidden: column.config?.hideField === 1,
       ellipsis: false,
