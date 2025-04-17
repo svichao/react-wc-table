@@ -12,7 +12,11 @@
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\"",
     "test": "umi-test",
     "test:coverage": "umi-test --coverage",
-    "build:beta": "npm publish --tag beta --registry https://registry.npmjs.org"
+    "build:beta": "npm publish --tag beta --registry https://registry.npmjs.org",
+    "prerelease:beta": "npm version prerelease --preid beta",
+    "prerelease:patch": "npm version patch",
+    "prerelease:minor": "npm version minor",
+    "prerelease:major": "npm version major"
   },
   "main": "lib",
   "module": "es",
