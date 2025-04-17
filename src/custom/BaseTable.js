@@ -71,7 +71,6 @@ class BaseTable {
 
   getColumnSortFn() {
     return (props) => {
-      console.log('props: ', props);
       // 多重排序时，取最后一个
       if (props?.length) {
         const { key, order } = props[props?.length - 1] || {};
