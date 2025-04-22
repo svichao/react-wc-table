@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Typography from 'antd/es/typography';
 import React from 'react';
 
@@ -8,7 +7,7 @@ const Ellipsis = (props) => {
   const { ellipsis, style, children, ...rest } = props;
   if (ellipsis && ellipsis.tooltip) {
     return (
-      <Text ellipsis={ellipsis} style={{ ...style }}>
+      <Text ellipsis={ellipsis} style={{ ...style, fontSize: 'inherit' }}>
         {children}
       </Text>
     );

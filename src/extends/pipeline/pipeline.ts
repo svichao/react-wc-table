@@ -1,7 +1,7 @@
-import { BaseTableProps } from '../../base';
 import React, { useState } from 'react';
+import { BaseTableProps } from '../../base';
 
-import { ArtColumn, Transform, TableProps } from './interfaces';
+import { ArtColumn, TableProps, Transform } from './interfaces';
 import { mergeCellProps } from './utils/utils';
 
 // import { mergeCellProps } from '../utils';
@@ -136,11 +136,11 @@ export class TablePipeline {
   private _otherProps: TableProps | undefined;
 
   getRowHeight() {
-    return this._otherProps?.rowHeight || 30;
+    return this._otherProps?.rowHeight;
   }
 
   getHeaderHeight() {
-    return this._otherProps?.headerHeight || 40;
+    return this._otherProps?.headerHeight;
   }
 
   getFixed() {

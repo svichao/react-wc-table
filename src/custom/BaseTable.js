@@ -63,10 +63,22 @@ class BaseTable {
       bodyStyle: this.getBodyStyle(),
       style: this.getStyle(),
       extraProps: this.getExtraProps(),
-      columnResize: this.getColumnResizeFn(),
+      columnResizeEnd: this.getColumnResizeFn(),
       columnSort: this.getColumnSortFn(),
+      rowHeight: this.getRowHeight(),
+      // estimatedRowHeight: this.getEstimatedRowHeight(),
     };
     return props;
+  }
+
+  getRowHeight() {
+    return 32;
+  }
+
+  getEstimatedRowHeight() {
+    return ({ rowData, rowIndex }) => {
+      return 32;
+    };
   }
 
   getColumnSortFn() {
@@ -623,6 +635,10 @@ class BaseTable {
     return !!sortable;
   }
 
+  getColumnEllipsis() {
+    return !get(this.styleData, 'baseFormat.wrap.autoWrapText');
+  }
+
   // 格式化列
   formatColumn(column = {}) {
     const order = this.getSortOrder(column);
@@ -640,7 +656,7 @@ class BaseTable {
         sortable: this.getSortable(column.config?.orderDirection),
       },
       hidden: column.config?.hideField === 1,
-      ellipsis: false,
+      ellipsis: this.getColumnEllipsis(),
     };
     if (!ret.cellRenderer) {
       ret.cellRenderer = ({ cellData, column }) => {

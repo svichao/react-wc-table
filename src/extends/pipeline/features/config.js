@@ -191,14 +191,17 @@ export const processColumn = ({ column, ...rest }) => {
         }
       }
     }
-    return (
-      <Ellipsis
-        ellipsis={column.ellipsis ? { tooltip: cellData } : false}
-        style={{ ...style }}
-      >
-        {content}
-      </Ellipsis>
-    );
+    if (column.ellipsis) {
+      return (
+        <Ellipsis
+          ellipsis={column.ellipsis ? { tooltip: cellData } : false}
+          style={{ ...style }}
+        >
+          {content}
+        </Ellipsis>
+      );
+    }
+    return <span style={{ ...style }}>{content}</span>;
   };
 
   column.headerRenderer = ({ column, ...rest }) => {

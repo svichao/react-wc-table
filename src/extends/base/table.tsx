@@ -63,7 +63,7 @@ function BaseTable(props: any) {
   const pipeline = useTablePipeline({
     primaryKey: 'id',
   })
-    .input({ data, columns } as any)
+    .input({ data, columns } as any, { rowHeight, headerHeight: hh } as any)
     .use(groupHeader({ headHeight: hh, cellPadding: 0 }));
 
   const { sorts, sortState } = getSorts(pipeline.getColumns());
