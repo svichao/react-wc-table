@@ -1,6 +1,6 @@
 {
   "name": "@bdlite/table",
-  "version": "1.0.15-beta.0",
+  "version": "1.0.15-beta.1",
   "private": false,
   "scripts": {
     "start": "dumi dev",
