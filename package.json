@@ -48,6 +48,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-fast-compare": "^3.0.1",
+    "react-texty": "^0.6.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "styled-components": "^5.2.1"

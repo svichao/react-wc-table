@@ -1,13 +1,15 @@
-import Typography from 'antd/es/typography';
 import React from 'react';
-
-const { Text } = Typography;
+import Text from 'react-texty';
+import 'react-texty/styles.css';
 
 const Ellipsis = (props) => {
   const { ellipsis, style, children, ...rest } = props;
   if (ellipsis && ellipsis.tooltip) {
     return (
-      <Text ellipsis={ellipsis} style={{ ...style, fontSize: 'inherit' }}>
+      <Text
+        tooltip={ellipsis.tooltip}
+        style={{ ...style, fontSize: 'inherit' }}
+      >
         {children}
       </Text>
     );

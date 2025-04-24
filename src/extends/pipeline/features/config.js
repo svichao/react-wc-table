@@ -171,7 +171,9 @@ export const processColumn = ({ column, ...rest }) => {
           if (compareOpt.length) {
             let ret = [content];
             compareOpt.forEach((j) => {
-              ret.push(rowData[`${column.key}##${j}`].v);
+              if (rowData[`${column.key}##${j}`]) {
+                ret.push(rowData[`${column.key}##${j}`].v);
+              }
             });
             content = ret
               .filter((c) => c !== null)
@@ -194,7 +196,9 @@ export const processColumn = ({ column, ...rest }) => {
     if (column.ellipsis) {
       return (
         <Ellipsis
-          ellipsis={column.ellipsis ? { tooltip: cellData } : false}
+          ellipsis={
+            column.ellipsis ? { tooltip: getFieldMapValue(cellData) } : false
+          }
           style={{ ...style }}
         >
           {content}
@@ -331,6 +335,9 @@ export const getCellStyleFromColumn = (column) => {
     } else {
       style.justifyContent = 'flex-start';
     }
+  }
+  if (column.lineHeight) {
+    style.lineHeight = column.lineHeight;
   }
   return style;
 };
